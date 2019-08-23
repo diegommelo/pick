@@ -12,8 +12,8 @@
     <router-view/>
     <br/>
     <footer class="rodape">
-      <p>made with ❤️ by <a href="https://twitter.com/dieguitoo">@paulinha_v</a> in 🇧🇷</p>
-      <p>Teams logo by <a href="https://hltv.org">hltv.org</a></p>
+      <p>made with ❤️ by <a href="https://twitter.com/dieguitoo">@dieguitoo</a> in 🇧🇷</p>
+      <p>teams logo by <a href="https://hltv.org">hltv.org</a></p>
     </footer>
   </div>
 </template>
@@ -50,5 +50,8 @@ html {
 }
 .major-logo {
   max-width:120px;
+}
+.button.is-primary {
+  background-color: #42b983 !important;
 }
 </style>

@@ -1,11 +1,14 @@
 <template>
   <div>
+      <h3 @click="showList = !showList" aria-controls="teamList">Show team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
+      <b-collapse :open.sync="showList" aria-id="teamList" >
       <div class="team-list">
         <div v-for="(team,i) in teams" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
           <img :src="logosrc+team.logo" draggable="false" class="" /><br/>
           <i v-if="isPicked(team.logo)" class="fas fa-check"></i>          
         </div>
       </div>
+      </b-collapse>
     <div class="teams-wrapper section">
       <div class="columns is-mobile">
         <div class="column is-one-quarter-desktop is-two-fifths-mobile">
@@ -17,22 +20,32 @@
         </div>
       </div>
       <div class="columns is-mobile">
-        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)" @touchstart="pickTeams($event)">
-            <img :src="logosrc+selected[0]" draggable="false" class="" /><br/>
-        </div>
+        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
+            <img :src="logosrc+selected[0]" draggable="false" class="" />
+        </div>        
         <div class="column"></div>
-        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1)">
+        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
             <img :src="logosrc+selected[1]" draggable="false"><br/>
         </div>
-      </div>    
+      </div>
+      <div class="columns is-mobile is-hidden-desktop">
+        <div class="column is-one-quarter-desktop is-two-fifths-mobile" @click="pickTeams(0, $event)">
+          <button class="button is-primary is-small">Pick</button>         
+        </div>        
+        <div class="column"></div>
+        <div class="column is-one-quarter-desktop is-two-fifths-mobile" @click="pickTeams(1, $event)">
+          <button class="button is-primary is-small">Pick</button>         
+        </div>
+      </div>         
       <h2>The remaining <strong>7 teams</strong> that will <strong>advance</strong></h2>
       <br/>
-      <div class="columns is-multiline">
-        <div v-for="n in 7" :key="n" class="column bordas remaning-picks" @click="removeTeam(n+2)" @dragover.prevent draggable="false" @drop="dragFinish(n+2,$event)">
-          <img :src="logosrc+selected[n+2]" class="mini-logo" draggable="false"/><br/>
+      <div class="columns is-mobile is-multiline">
+        <div v-for="n in 7" :key="n" class="column is-one-third" @click="removeTeam(n+2)" @dragover.prevent draggable="false" @drop="dragFinish(n+2,$event)">
+          <img :src="logosrc+selected[n+2]" class="mini-logo bordas" draggable="false"/><br/>
+          <button class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+2, $event)">Pick</button>
         </div>
       </div>
-      <small>(Click to remove)</small>
+      <small class="is-hidden-mobile">(Click to remove)</small>
     </div>
   </div>
 </template>
@@ -68,10 +81,11 @@ export default {
       ],
       logosrc:"https://static.hltv.org/images/team/logo/",
       selected:[],
+      showList:false
     }
   },
   methods:{
-    pickTeams: function(evt){
+    pickTeams: function(n, evt){
       evt.preventDefault()
       console.log(evt.type)
       Modal.open({
@@ -126,12 +140,21 @@ export default {
   .team-list {
     padding:0 90px;
   }
+  .mini-logo {
+    width:60px;
+    height:60px;
+    display: inline-block;
+    height: 100%;
+  }
 }
 @media (max-width:768px) {
   .team-list {
     padding: 0 20px;
   }
 }
+  .pick-button {
+    margin-left:2px;
+  }
   .nopick {
     display: inline-block;
     height: 100% !important;
@@ -157,12 +180,6 @@ export default {
   }
   .team-list img, .medium-logo {
     width: 40px;
-  }
-  .mini-logo {
-    width:60px;
-    height:60px;
-    display: inline-block;
-    height: 100%;
   }
   .bordas {
     border: 3px dotted #e0e0e0;

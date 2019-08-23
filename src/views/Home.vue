@@ -6,9 +6,12 @@
 
 <script>
 // @ is an alias to /src
+import Vue from 'vue'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import HelloWorld from '@/components/HelloWorld.vue'
+
+Vue.use(Buefy)
 
 export default {
   name: 'home',
