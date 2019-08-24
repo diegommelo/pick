@@ -21,11 +21,11 @@
       </div>
       <div class="columns is-mobile loser-winner">
         <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
-            <img :src="'/img/stickers/'+selected[0]+'.png'" draggable="false" class="" />
+            <img :src="'/img/stickers/'+selected[0]+'.png'" draggable="false" class="animated" />
         </div>        
         <div class="column"></div>
         <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
-            <img :src="'/img/stickers/'+selected[1]+'.png'" draggable="false"><br/>
+            <img :src="'/img/stickers/'+selected[1]+'.png'" draggable="false" class="animated"><br/>
         </div>
       </div>
       <div class="columns is-mobile is-hidden-desktop">
@@ -55,7 +55,7 @@ import teamlist from '@/components/teamlist.vue'
 import { ModalProgrammatic as Modal } from 'buefy'
 
 export default {
-  name: 'HelloWorld',
+  name: 'challengers',
   props: {
     msg: String
   },
@@ -104,18 +104,20 @@ export default {
       this.selected[n]=undefined
       this.$forceUpdate()
     },
-    drop: function(ev){
-      console.log(ev)
-    },
     dragStart: function(ev){
+      console.log(ev)
       ev.dataTransfer.setData("text",ev.target.id)
       ev.dataTransfer.dropEffect="move";
     },
     dragFinish: function(to, ev){
+      console.log(ev)
       let data = ev.dataTransfer.getData("text")
-      if(this.selected.indexOf(data)==-1){
+      if(this.selected.indexOf(parseInt(data))==-1){
         this.selected[to] = parseInt(data)
-        this.$forceUpdate()
+        this.$forceUpdate()  
+        ev.target.classList.add('flash')      
+      } else {
+        console.log('naio')
       }
     },
     isPicked: function(team){

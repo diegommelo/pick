@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <HelloWorld />
+    <challengers />
   </div>
 </template>
 
@@ -9,14 +9,14 @@
 import Vue from 'vue'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
-import HelloWorld from '@/components/HelloWorld.vue'
+import challengers from '@/components/challengers.vue'
 
 Vue.use(Buefy)
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    challengers
   }
 }
 </script>
