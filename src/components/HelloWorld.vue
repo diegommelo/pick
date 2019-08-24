@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h3 @click="showList = !showList" aria-controls="teamList">Show team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
+      <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
       <b-collapse :open.sync="showList" aria-id="teamList" >
       <div class="team-list">
         <div v-for="(team,i) in teams" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
@@ -10,7 +10,7 @@
       </div>
       </b-collapse>
     <div class="teams-wrapper section">
-      <div class="columns is-mobile">
+      <div class="columns is-mobile loser-winner">
         <div class="column is-one-quarter-desktop is-two-fifths-mobile">
           <h1 class="is-size-3"><strong>3-0</strong></h1>
         </div>
@@ -19,28 +19,28 @@
           <h1 class="is-size-3"><strong>0-3</strong></h1>
         </div>
       </div>
-      <div class="columns is-mobile">
+      <div class="columns is-mobile loser-winner">
         <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
-            <img :src="logosrc+selected[0]" draggable="false" class="" />
+            <img :src="'/img/stickers/'+selected[0]+'.png'" draggable="false" class="" />
         </div>        
         <div class="column"></div>
         <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
-            <img :src="logosrc+selected[1]" draggable="false"><br/>
+            <img :src="'/img/stickers/'+selected[1]+'.png'" draggable="false"><br/>
         </div>
       </div>
       <div class="columns is-mobile is-hidden-desktop">
-        <div class="column is-one-quarter-desktop is-two-fifths-mobile" @click="pickTeams(0, $event)">
-          <button class="button is-primary is-small">Pick</button>         
+        <div class="column is-one-quarter-desktop is-two-fifths-mobile">
+          <button class="button is-primary is-small" @click="pickTeams(0, $event)">Pick</button>         
         </div>        
         <div class="column"></div>
-        <div class="column is-one-quarter-desktop is-two-fifths-mobile" @click="pickTeams(1, $event)">
-          <button class="button is-primary is-small">Pick</button>         
+        <div class="column is-one-quarter-desktop is-two-fifths-mobile">
+          <button class="button is-primary is-small" @click="pickTeams(1, $event)">Pick</button>         
         </div>
       </div>         
-      <h2>The remaining <strong>7 teams</strong> that will <strong>advance</strong></h2>
+      <h2 class="remaining-msg">The remaining <strong>7 teams</strong> that will <strong>advance</strong></h2>
       <br/>
       <div class="columns is-mobile is-multiline">
-        <div v-for="n in 7" :key="n" class="column is-one-third" @click="removeTeam(n+2)" @dragover.prevent draggable="false" @drop="dragFinish(n+2,$event)">
+        <div v-for="n in 7" :key="n" class="column is-one-third-mobile" @click="removeTeam(n+2)" @dragover.prevent draggable="false" @drop="dragFinish(n+2,$event)">
           <img :src="logosrc+selected[n+2]" class="mini-logo bordas" draggable="false"/><br/>
           <button class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+2, $event)">Pick</button>
         </div>
@@ -81,7 +81,9 @@ export default {
       ],
       logosrc:"https://static.hltv.org/images/team/logo/",
       selected:[],
-      showList:false
+      showList:true,
+      major:"",
+      stage:""
     }
   },
   methods:{
@@ -134,24 +136,32 @@ export default {
 <style scoped>
 @media (min-width:769px){
   .teams-wrapper{
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto;  
   }  
   .team-list {
     padding:0 90px;
   }
   .mini-logo {
-    width:60px;
-    height:60px;
-    display: inline-block;
-    height: 100%;
+    width:100px;
+  }
+  .loser-winner {
+    max-width: 600px;
+    margin: 0 auto;
   }
 }
 @media (max-width:768px) {
   .team-list {
     padding: 0 20px;
   }
+  .mini-logo {
+    width: 60px;
+    height: 60px;
+  }
 }
+  .remaining-msg {
+    margin-top:30px;
+  }
   .pick-button {
     margin-left:2px;
   }

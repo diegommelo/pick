@@ -48,6 +48,9 @@ html {
   padding:10px;
   font-size:0.9rem;
 }
+.section {
+  padding: 1rem !important;
+}
 .major-logo {
   max-width:120px;
 }

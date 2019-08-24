@@ -22,6 +22,7 @@ export default {
 </script>
 <style>
 @import url('https://use.fontawesome.com/releases/v5.2.0/css/all.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css');
 
 .home {
   text-align:center;

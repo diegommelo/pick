@@ -1,8 +1,7 @@
 <template>
   <div class="teamlist-wrapper">  
-        <div v-for="(team,key) in teams" :key="key" @click="pickTeam(team)">
+        <div v-for="(team,key) in teams" :key="key" @click="pickTeam(team)" class="mobile-team-list">
             <img :src="logosrc+team.logo" class="semi-logo"/>
-            <br/><p>{{team.name}}</p>
         </div>
   </div>
 </template>
@@ -25,5 +24,9 @@ export default {
 }
 .teamlist-wrapper div {
     padding:20px;
+}
+.mobile-team-list {
+  border: 3px dotted;
+  border-radius:10px;
 }
 </style>
