@@ -5,8 +5,8 @@
       <img src="https://static.hltv.org/images/eventLogos/4450.png" class="major-logo"/>  
     </div>
     <div id="nav">
-      <router-link to="/challengers">Challengers</router-link> |
-      <router-link to="/">Champions <small><i>(soon)</i></small></router-link> |  
+      <router-link to="/major/berlin/stage/challengers">Challengers</router-link> |
+      <router-link to="/major/berlin/stage/champions">Champions <small><i>(soon)</i></small></router-link> |  
       <router-link to="/">Playoffs <small><i>(maybe)</i></small></router-link>      
     </div>
     <router-view/>

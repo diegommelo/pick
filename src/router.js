@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Challengers from './views/Challengers.vue'
 
 Vue.use(Router)
 
@@ -12,9 +12,9 @@ export default new Router({
       path: '/', redirect:'/challengers'
     },
     {
-      path: '/challengers',
-      name: 'home',
-      component: Home
+      path: '/major/:major/stage/:stage',
+      component: Challengers,
+      props:true
     },
     {
       path: '/about',

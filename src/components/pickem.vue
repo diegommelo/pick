@@ -3,7 +3,7 @@
       <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
       <b-collapse :open.sync="showList" aria-id="teamList" >
       <div class="team-list">
-        <div v-for="(team,i) in teams" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
+        <div v-for="(team,i) in teams['teams']" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
           <img :src="logosrc+team.logo" draggable="false" class="" /><br/>
           <i v-if="isPicked(team.logo)" class="fas fa-check"></i>          
         </div>
@@ -20,12 +20,12 @@
         </div>
       </div>
       <div class="columns is-mobile loser-winner">
-        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
-            <img :src="'/img/stickers/'+selected[0]+'.png'" draggable="false" class="animated" />
+        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile picked" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
+            <img :src="logosrc+selected[0]" draggable="false" class="animated" />
         </div>        
         <div class="column"></div>
-        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
-            <img :src="'/img/stickers/'+selected[1]+'.png'" draggable="false" class="animated"><br/>
+        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile picked" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
+            <img :src="logosrc+selected[1]" draggable="false" class="animated"><br/>
         </div>
       </div>
       <div class="columns is-mobile is-hidden-desktop">
@@ -41,7 +41,7 @@
       <br/>
       <div class="columns is-mobile is-multiline">
         <div v-for="n in 7" :key="n" class="column is-one-third-mobile" @click="removeTeam(n+2)" @dragover.prevent draggable="false" @drop="dragFinish(n+2,$event)">
-          <img :src="logosrc+selected[n+2]" class="mini-logo bordas" draggable="false"/><br/>
+          <img :src="logosrc+selected[n+2]" class="mini-logo bordas picked" draggable="false"/><br/>
           <button class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+2, $event)">Pick</button>
         </div>
       </div>
@@ -55,35 +55,13 @@ import teamlist from '@/components/teamlist.vue'
 import { ModalProgrammatic as Modal } from 'buefy'
 
 export default {
-  name: 'challengers',
-  props: {
-    msg: String
-  },
+  name: 'pickem',
+  props: ["teams","stage"],
   data: function(){
     return {
-      teams: [
-        {logo:9565, name:"vitality"},
-        {logo:6673, name:"nrg"},
-        {logo:5995, name:"g2"},  
-        {logo:8297, name:"furia"},
-        {logo:4494, name:"mousesports"},
-        {logo:7533, name:"north"},
-        {logo:10150, name:"crazy"},  
-        {logo:8135, name:"forze"},                                                 
-        {logo:8008, name:"grayhound"},   
-        {logo:5005, name:"complexity"},
-        {logo:8120, name:"avangar"},
-        {logo:4863, name:"tyloo"},  
-        {logo:6619, name:"intz"},   
-        {logo:8305, name:"dream eaters"},
-        {logo:5310, name:"hellraisers"},
-        {logo:8772, name:"syman gaming"},  
-      ],
       logosrc:"https://static.hltv.org/images/team/logo/",
       selected:[],
       showList:true,
-      major:"",
-      stage:""
     }
   },
   methods:{
@@ -211,5 +189,9 @@ export default {
   }
   .fas{
     color:#a5d6a7;
+  }
+  .picked {
+  background: rgb(238,238,238);
+  background: radial-gradient(circle, rgba(238,238,238,1) 31%, rgba(245,245,245,1) 72%);   
   }
 </style>
