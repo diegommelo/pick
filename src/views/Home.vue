@@ -8,15 +8,29 @@
 // @ is an alias to /src
 import Vue from 'vue'
 import Buefy from 'buefy'
+import VueFirestore from 'vue-firestore';
 import 'buefy/dist/buefy.css'
+import { db } from './firebase';
 import challengers from '@/components/challengers.vue'
 
-Vue.use(Buefy)
+Vue.use(Buefy, VueFirestore)
 
 export default {
   name: 'home',
+  data() {
+    return {
+      teams:[],
+      major:null,
+      stage:null
+    }
+  },
   components: {
     challengers
+  },
+  firestore() {
+    return {
+      teams: db.collection('berlin')
+    }
   }
 }
 </script>
