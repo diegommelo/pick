@@ -6,8 +6,8 @@
     </div>
     <div id="nav">
       <router-link to="/major/berlin/stage/challengers">Challengers</router-link> |
-      <router-link to="/major/berlin/stage/champions">Champions <small><i>(soon)</i></small></router-link> |  
-      <router-link to="/">Playoffs <small><i>(maybe)</i></small></router-link>      
+      <router-link to="/major/berlin/stage/champions">Champions</router-link> |  
+      <router-link to="/">Legends <small><i>(maybe)</i></small></router-link>      
     </div>
     <router-view/>
     <br/>

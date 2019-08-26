@@ -1,39 +1,52 @@
 <template>
   <div class="home">
-    <pickem v-if="times" :teams="times" />
+    <pickem v-if="times" :teams="times" :major="major" :stage="stage" v-on:save-pick="savePick"/>
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
   </div>
 </template>
 
 <script>
-import pickem from '@/components/pickem.vue'
 import {db} from '@/firebaseconfig';
+import pickem from '@/components/pickem.vue'
 
 // @ is an alias to /src
 export default {
   name: 'Challengers',
-  props:["major","stage"],
+  props:["major","stage","pick"],
   data() {
     return {
       times:[],
+      isLoading: true,
+      pickLoaded:[],
+      selected:[]
     }
   },
   components: {
     pickem
   },
   methods: {
-    fetchData(major,stage) {
-      const firedb = db.collection(major)        
-      this.$bind('times', firedb.doc(stage)).then(times=>{
-        console.log(times)
-      })      
+    fetchData(major,stage,pick) {
+      this.isLoading = true
+      if(pick==undefined&&major!=undefined&&stage!=undefined){
+        const firedb = db.collection(major)        
+        this.$bind('times', firedb.doc(stage)).then(times=>{
+          this.isLoading=false
+        })  
+      } else {
+        console.log(pick)
+      }   
+    },
+    savePick(data){
+      this.$buefy.toast.open('salvo')
+      console.log(data)
     }
   },
   created() {
-    this.fetchData(this.major,this.stage)
+    this.fetchData(this.major,this.stage,this.pick)
   },
   watch: {
     '$route' (to,from){
-      this.fetchData(to.params.major,to.params.stage)
+      this.fetchData(to.params.major,to.params.stage, to.params.pick)
     }
   }
 }

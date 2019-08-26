@@ -40,12 +40,13 @@
       <h2 class="remaining-msg">The remaining <strong>7 teams</strong> that will <strong>advance</strong></h2>
       <br/>
       <div class="columns is-mobile is-multiline">
-        <div v-for="n in 7" :key="n" class="column is-one-third-mobile" @click="removeTeam(n+2)" @dragover.prevent draggable="false" @drop="dragFinish(n+2,$event)">
-          <img :src="logosrc+selected[n+2]" class="mini-logo bordas picked" draggable="false"/><br/>
-          <button class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+2, $event)">Pick</button>
+        <div v-for="n in 7" :key="n" class="column is-one-third-mobile" @click="removeTeam(n+1,$event)" @dragover.prevent draggable="false" @drop="dragFinish(n+1,$event)">
+          <img :src="logosrc+selected[n+1]" class="mini-logo bordas picked" draggable="false"/><br/>
+          <button class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+1, $event)">Pick</button>
         </div>
       </div>
-      <small class="is-hidden-mobile">(Click to remove)</small>
+      <small class="is-hidden-mobile">(Click to remove)</small><br/>
+      <button class="button is-primary btnSave" @click="sendPickem()">Save Pick'Em</button>
     </div>
   </div>
 </template>
@@ -56,11 +57,11 @@ import { ModalProgrammatic as Modal } from 'buefy'
 
 export default {
   name: 'pickem',
-  props: ["teams","stage"],
+  props: ["teams", "major", "stage"],
   data: function(){
     return {
       logosrc:"https://static.hltv.org/images/team/logo/",
-      selected:[],
+      selected:['undefined','undefined','undefined','undefined','undefined','undefined','undefined','undefined','undefined'],
       showList:true,
     }
   },
@@ -79,23 +80,25 @@ export default {
     },
     removeTeam:function(n,evt){
       console.log(evt.type)
-      this.selected[n]=undefined
+      this.selected[n]='undefined'
       this.$forceUpdate()
     },
     dragStart: function(ev){
-      console.log(ev)
       ev.dataTransfer.setData("text",ev.target.id)
       ev.dataTransfer.dropEffect="move";
     },
     dragFinish: function(to, ev){
-      console.log(ev)
       let data = ev.dataTransfer.getData("text")
       if(this.selected.indexOf(parseInt(data))==-1){
         this.selected[to] = parseInt(data)
         this.$forceUpdate()  
-        ev.target.classList.add('flash')      
+        //ev.target.classList.add('flash')      
       } else {
-        console.log('naio')
+        console.log(this.selected.indexOf(parseInt(data)))
+        let oldIdx = this.selected.indexOf(parseInt(data))
+        this.selected[oldIdx]='undefined'
+        this.selected[to] = parseInt(data)
+        this.$forceUpdate()  
       }
     },
     isPicked: function(team){
@@ -107,6 +110,23 @@ export default {
     },
     dragOver:function(ev){
       console.log(ev)
+    },
+    sendPickem:function(){
+      if(this.selected.length<=9&&this.selected.indexOf('undefined')!==-1){
+        this.$buefy.toast.open({
+          "message":"Pick'em incomplete",
+          "type":"is-danger",
+          "position":"is-bottom"
+        })        
+      } else {
+        console.log(this.selected.indexOf(undefined))
+        let data = {
+          "pickeds": this.selected,
+          "major":this.major,
+          "stage":this.stage
+        }
+        this.$emit('save-pick',data)
+      }
     }
   }
 }
@@ -191,7 +211,10 @@ export default {
     color:#a5d6a7;
   }
   .picked {
-  background: rgb(238,238,238);
-  background: radial-gradient(circle, rgba(238,238,238,1) 31%, rgba(245,245,245,1) 72%);   
+    background: rgb(238,238,238);
+    background: radial-gradient(circle, rgba(238,238,238,1) 31%, rgba(245,245,245,1) 72%);   
+  }
+  .btnSave {
+    margin-top:20px;
   }
 </style>

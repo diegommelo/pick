@@ -9,10 +9,15 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/', redirect:'/challengers'
+      path: '/', redirect:'/major/berlin/stage/challengers'
     },
     {
       path: '/major/:major/stage/:stage',
+      component: Challengers,
+      props:true,
+    },
+    {
+      path:'/major/:major/stage/:stage/pick/;pick',
       component: Challengers,
       props:true
     },
