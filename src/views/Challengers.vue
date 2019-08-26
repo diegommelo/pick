@@ -18,7 +18,8 @@ export default {
       times:[],
       isLoading: true,
       pickLoaded:[],
-      selected:[]
+      selected:[],
+      db:null
     }
   },
   components: {
@@ -28,8 +29,7 @@ export default {
     fetchData(major,stage,pick) {
       this.isLoading = true
       if(pick==undefined&&major!=undefined&&stage!=undefined){
-        const firedb = db.collection(major)        
-        this.$bind('times', firedb.doc(stage)).then(times=>{
+        this.$bind('times', this.db.doc(stage)).then(times=>{
           this.isLoading=false
         })  
       } else {
@@ -37,11 +37,18 @@ export default {
       }   
     },
     savePick(data){
-      this.$buefy.toast.open('salvo')
-      console.log(data)
+      try {
+        db.collection('picks').doc(this.major).collection('picks').doc().set(data).then(()=>{
+          this.$buefy.toast.open('salvo')
+        })
+      }
+      catch(e){
+        console.log(e)
+      }
     }
   },
   created() {
+    this.db = db.collection(this.major)
     this.fetchData(this.major,this.stage,this.pick)
   },
   watch: {
