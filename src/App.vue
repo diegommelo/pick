@@ -38,6 +38,21 @@ export default {
       },
       immediate: true
     }
+  },
+  head: {
+    title: {
+      inner: "Pick'Em Simulator",
+      separator:"",
+      complement:""
+    },
+    meta: [
+      {name:"application-name", content:"Pick'Em Simulator"},
+      {name:"description", content:"Simulator of the Pick'Em Challenge form CS GO"},
+      {name:"twitter:title", content:"Pick'Em Simulator"},
+      {name:"twitter:description", content:"Make your picks without spent money on stickers!"},
+      {property:'og:title',content:"Pick'Em Simulator"},
+      {property:'og:image', content:'https://static.hltv.org/images/eventLogos/4450.png'}
+    ]
   }
 }
 </script>
