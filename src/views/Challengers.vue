@@ -3,7 +3,8 @@
     <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected" :ispickem="false" v-on:save-pick="savePick">
       <template v-slot:stage></template>
       <template v-slot:savePickBtn>
-        <small class="is-hidden-mobile">(Click to remove)</small><br/>
+        <small class="is-hidden-mobile">(Click to remove)</small>
+        <b-input v-model="name" placeholder="Your name" max-length="120" class="user-name"></b-input>
         <button class="button is-primary btnSave" @click="savePick()">Save Pick'Em</button>
       </template>
     </pickem>
@@ -23,6 +24,7 @@ export default {
     return {
       times:[],
       isLoading: true,
+      name:null,
       selected:["undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined"],
       db:null
     }
@@ -59,6 +61,7 @@ export default {
             pickeds: this.selected,
             major:this.major,
             stage:this.stage,
+            user:this.name,
             createdAt:Date(Date.now())
           }).then(ref=>{
             this.isLoading = true
@@ -96,5 +99,9 @@ export default {
 .semi-logo {
   width:60px;
   height:60px;
+}
+.user-name {
+  max-width:200px;
+  margin: 20px auto 0 auto;
 }
 </style>

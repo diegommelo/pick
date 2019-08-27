@@ -2,7 +2,8 @@
   <div class="home">
     <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected" :ispickem="true">
       <template v-slot:stage>
-        <h3 class="title stage-pick">{{stage}} Stage</h3>
+        <h3 class="stage-pick">{{stage}} Stage</h3>
+        <h2 v-if="name!=null" class="by-user">by {{name}}</h2>
       </template>
       <template v-slot:savePickBtn>
         <router-link to="/" class="button is-primary">New Pick'Em</router-link>
@@ -26,7 +27,8 @@ export default {
       isLoading: true,
       selected:[],
       major:null,
-      stage:null
+      stage:null,
+      name:null
     }
   },
   components: {
@@ -42,6 +44,7 @@ export default {
           el.selected = data.pickeds
           el.major = data.major
           el.stage = data.stage
+          el.name = data.user
           db.collection(data.major).doc(data.stage).get().then(snapshot =>{
             const dataMajor = snapshot.data()
             el.times = dataMajor.teams
@@ -73,6 +76,8 @@ export default {
   height:60px;
 }
 .stage-pick {
+  font-size:2rem;
+  font-weight: bold;
   text-transform: capitalize;
 }
 </style>
