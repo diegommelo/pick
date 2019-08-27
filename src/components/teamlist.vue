@@ -17,7 +17,8 @@ export default {
   },
   methods: {
     pickTeam(team){
-      this.$emit('selectTeam',team)
+      let data = {'pos':this.position,'team':team}
+      this.$emit('selectTeam',data)
       this.$emit('close')
     }
   }

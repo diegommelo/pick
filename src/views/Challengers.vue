@@ -104,4 +104,7 @@ export default {
   max-width:200px;
   margin: 20px auto 0 auto;
 }
+input:active, input:focus {
+  border-color:#42b983 !important;
+}
 </style>

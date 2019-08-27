@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot name="stage"></slot>
-      <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
+      <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop show-team-list"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
       <b-collapse :open.sync="showList" aria-id="teamList" >
       <div class="team-list">
         <div v-for="(team,i) in teams" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
@@ -74,11 +74,12 @@ export default {
         props:{
           "teams":this.teams,
           "logosrc":this.logosrc,
-          "poisiton":n
+          "position":n
         },
         events: {
           selectTeam(event){
-            el.selected[n]=event.logo
+            console.log(event)
+            el.pickTeam(event.pos,event.team.logo)
             el.$forceUpdate()
           }
         }
@@ -108,7 +109,7 @@ export default {
     dragOver:function(ev){
       console.log(ev)
     },
-    pickTeam:function(data){
+    pickTeam:function(to,data){
       if(this.selected.indexOf(parseInt(data))==-1){
         this.selected[to] = parseInt(data)
         this.$forceUpdate()  
@@ -211,5 +212,8 @@ export default {
   }
   .btnSave {
     margin-top:20px;
+  }
+  .show-team-list{
+    margin-top:25px;
   }
 </style>
