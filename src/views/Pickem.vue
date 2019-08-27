@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected">
+    <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected" :ispickem="true">
+      <template v-slot:stage>
+        <h3 class="title stage-pick">{{stage}} Stage</h3>
+      </template>
       <template v-slot:savePickBtn>
         <router-link to="/" class="button is-primary">New Pick'Em</router-link>
       </template>
@@ -68,5 +71,8 @@ export default {
 .semi-logo {
   width:60px;
   height:60px;
+}
+.stage-pick {
+  text-transform: capitalize;
 }
 </style>

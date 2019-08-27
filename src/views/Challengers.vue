@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected" v-on:save-pick="savePick">
+    <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected" :ispickem="false" v-on:save-pick="savePick">
+      <template v-slot:stage></template>
       <template v-slot:savePickBtn>
         <small class="is-hidden-mobile">(Click to remove)</small><br/>
         <button class="button is-primary btnSave" @click="savePick()">Save Pick'Em</button>

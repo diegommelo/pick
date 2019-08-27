@@ -1,5 +1,6 @@
 <template>
   <div>
+    <slot name="stage"></slot>
       <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
       <b-collapse :open.sync="showList" aria-id="teamList" >
       <div class="team-list">
@@ -9,7 +10,7 @@
         </div>
       </div>
       </b-collapse>
-    <div class="teams-wrapper section">
+    <div class="teams-wrapper">
       <div class="columns is-mobile loser-winner">
         <div class="column is-one-quarter-desktop is-two-fifths-mobile">
           <h1 class="is-size-3"><strong>3-0</strong></h1>
@@ -28,7 +29,7 @@
             <img :src="logosrc+selected[1]" draggable="false" class="animated"><br/>
         </div>
       </div>
-      <div class="columns is-mobile is-hidden-desktop">
+      <div v-if="!ispickem" class="columns is-mobile is-hidden-desktop">
         <div class="column is-one-quarter-desktop is-two-fifths-mobile">
           <button class="button is-primary is-small" @click="pickTeams(0, $event)">Pick</button>         
         </div>        
@@ -42,7 +43,7 @@
       <div class="columns is-mobile is-multiline">
         <div v-for="n in 7" :key="n" class="column is-one-third-mobile" @click="removeTeam(n+1,$event)" @dragover.prevent draggable="false" @drop="dragFinish(n+1,$event)">
           <img :src="logosrc+selected[n+1]" class="mini-logo bordas picked" draggable="false"/><br/>
-          <button class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+1, $event)">Pick</button>
+          <button v-if="!ispickem" class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+1, $event)">Pick</button>
         </div>
       </div>
       <slot name="savePickBtn"></slot>
@@ -56,7 +57,7 @@ import { ModalProgrammatic as Modal } from 'buefy'
 
 export default {
   name: 'pickem',
-  props: ["teams", "major", "stage", "selected"],
+  props: ["teams", "major", "stage", "selected","ispickem"],
   data: function(){
     return {
       logosrc:"https://static.hltv.org/images/team/logo/",
@@ -77,9 +78,10 @@ export default {
       })
     },
     removeTeam:function(n,evt){
-      console.log(evt.type)
-      this.selected[n]='undefined'
-      this.$forceUpdate()
+      if(!this.ispickem){
+        this.selected[n]='undefined'
+        this.$forceUpdate()
+      }
     },
     dragStart: function(ev){
       ev.dataTransfer.setData("text",ev.target.id)
@@ -139,6 +141,9 @@ export default {
     width: 60px;
     height: 60px;
   }
+  .teams-wrapper {
+    padding:1rem;
+  }
 }
   .remaining-msg {
     margin-top:30px;
@@ -175,7 +180,6 @@ export default {
   .bordas {
     border: 3px dotted #e0e0e0;
     border-radius:10px;
-    margin:5px;
   }
   .border-winner {
     border: 3px dotted #e0e0e0;
