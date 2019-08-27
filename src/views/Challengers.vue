@@ -1,13 +1,18 @@
 <template>
   <div class="home">
-    <pickem v-if="times" :teams="times" :major="major" :stage="stage" v-on:save-pick="savePick"/>
+    <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected" v-on:save-pick="savePick">
+      <template v-slot:savePickBtn>
+        <small class="is-hidden-mobile">(Click to remove)</small><br/>
+        <button class="button is-primary btnSave" @click="savePick()">Save Pick'Em</button>
+      </template>
+    </pickem>
     <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
   </div>
 </template>
 
 <script>
 import {db} from '@/firebaseconfig';
-import pickem from '@/components/pickem.vue'
+import pickem from '@/components/pickem.vue';
 
 // @ is an alias to /src
 export default {
@@ -17,8 +22,7 @@ export default {
     return {
       times:[],
       isLoading: true,
-      pickLoaded:[],
-      selected:[],
+      selected:["undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined"],
       db:null
     }
   },
@@ -26,25 +30,48 @@ export default {
     pickem
   },
   methods: {
-    fetchData(major,stage,pick) {
+    fetchData(major,stage) {
       this.isLoading = true
-      if(pick==undefined&&major!=undefined&&stage!=undefined){
+      if(major!=undefined&&stage!=undefined){
+        this.selected=["undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined"]
         this.$bind('times', this.db.doc(stage)).then(times=>{
+          this.times = times['teams']
           this.isLoading=false
         })  
       } else {
-        console.log(pick)
+        console.log('fuen')
       }   
     },
     savePick(data){
-      try {
-        db.collection('picks').doc(this.major).collection('picks').doc().set(data).then(()=>{
-          this.$buefy.toast.open('salvo')
-        })
-      }
-      catch(e){
-        console.log(e)
-      }
+      if(this.selected.length<=9&&this.selected.indexOf('undefined')!==-1){
+        this.$buefy.toast.open({
+          "message":"Pick'Em Incomplete",
+          "type":"is-danger",
+          "position":"is-bottom"
+        })        
+      } else {
+        let data = {
+
+        }
+        try {
+          db.collection('picks').add({
+            pickeds: this.selected,
+            major:this.major,
+            stage:this.stage,
+            createdAt:Date(Date.now())
+          }).then(ref=>{
+            this.isLoading = true
+            this.$buefy.toast.open({
+              message:"Pick'Em Saved",
+              type:"is-success"
+            })
+            this.$router.push({name:'pick', params:{pick:ref.id}})
+          })
+        }
+        catch(e){
+          console.log(e)
+        }        
+      }      
     }
   },
   created() {

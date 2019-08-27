@@ -4,10 +4,10 @@
       <h1 class="is-size-3">Pick'Em Simulator</h1>
       <img src="https://static.hltv.org/images/eventLogos/4450.png" class="major-logo"/>  
     </div>
-    <div id="nav">
+    <div id="nav" v-if="isPick">
       <router-link to="/major/berlin/stage/challengers">Challengers</router-link> |
-      <router-link to="/major/berlin/stage/champions">Champions</router-link> |  
-      <router-link to="/">Legends <small><i>(maybe)</i></small></router-link>      
+      <router-link to="/major/berlin/stage/legends">Legends</router-link> |  
+      <router-link to="/">Champions <small><i>(maybe)</i></small></router-link>      
     </div>
     <router-view/>
     <br/>
@@ -17,7 +17,30 @@
     </footer>
   </div>
 </template>
-
+<script>
+export default {
+  name:'app',
+  data() {
+    return {
+      isPick:true
+    }
+  },
+  watch: {
+    '$route': {
+      handler: function(params){
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0        
+        if(params.name=="pick"){
+          this.isPick=false
+        } else {
+          this.isPick=true
+        }
+      },
+      immediate: true
+    }
+  }
+}
+</script>
 <style>
 html {
   background-color:#f5f5f5;

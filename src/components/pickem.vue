@@ -3,7 +3,7 @@
       <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
       <b-collapse :open.sync="showList" aria-id="teamList" >
       <div class="team-list">
-        <div v-for="(team,i) in teams['teams']" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
+        <div v-for="(team,i) in teams" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
           <img :src="logosrc+team.logo" draggable="false" class="" /><br/>
           <i v-if="isPicked(team.logo)" class="fas fa-check"></i>          
         </div>
@@ -45,8 +45,7 @@
           <button class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+1, $event)">Pick</button>
         </div>
       </div>
-      <small class="is-hidden-mobile">(Click to remove)</small><br/>
-      <button class="button is-primary btnSave" @click="sendPickem()">Save Pick'Em</button>
+      <slot name="savePickBtn"></slot>
     </div>
   </div>
 </template>
@@ -57,11 +56,10 @@ import { ModalProgrammatic as Modal } from 'buefy'
 
 export default {
   name: 'pickem',
-  props: ["teams", "major", "stage"],
+  props: ["teams", "major", "stage", "selected"],
   data: function(){
     return {
       logosrc:"https://static.hltv.org/images/team/logo/",
-      selected:['undefined','undefined','undefined','undefined','undefined','undefined','undefined','undefined','undefined'],
       showList:true,
     }
   },
@@ -110,23 +108,6 @@ export default {
     },
     dragOver:function(ev){
       console.log(ev)
-    },
-    sendPickem:function(){
-      if(this.selected.length<=9&&this.selected.indexOf('undefined')!==-1){
-        this.$buefy.toast.open({
-          "message":"Pick'em incomplete",
-          "type":"is-danger",
-          "position":"is-bottom"
-        })        
-      } else {
-        console.log(this.selected.indexOf(undefined))
-        let data = {
-          "pickeds": this.selected,
-          "major":this.major,
-          "stage":this.stage
-        }
-        this.$emit('save-pick',data)
-      }
     }
   }
 }
@@ -146,7 +127,7 @@ export default {
     width:100px;
   }
   .loser-winner {
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
   }
 }

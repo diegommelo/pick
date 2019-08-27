@@ -9,7 +9,5 @@ const config = {
   messagingSenderId: "1013394410761"
 }
 
-const { TimeStamp, GeoPoint } = firebase.firestore
-export { TimeStamp, GeoPoint }
-
-export const db = firebase.initializeApp(config).firestore();
+const db = firebase.initializeApp(config).firestore();
+export { db }
