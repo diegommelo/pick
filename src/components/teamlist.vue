@@ -9,7 +9,18 @@
 <script>
 export default {
   name: 'teamslist',
-  props: ['teams', 'pickeds','logosrc']
+  props: ['teams', 'pickeds','logosrc', 'position'],
+  data() {
+    return {
+      selected:["undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined"],
+    }
+  },
+  methods: {
+    pickTeam(team){
+      this.$emit('selectTeam',team)
+      this.$emit('close')
+    }
+  }
 }
 </script>
 

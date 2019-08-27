@@ -67,13 +67,20 @@ export default {
   methods:{
     pickTeams: function(n, evt){
       evt.preventDefault()
-      console.log(evt.type)
+      let el = this
       Modal.open({
         parent:this,
         component:teamlist,
         props:{
           "teams":this.teams,
-          "logosrc":this.logosrc
+          "logosrc":this.logosrc,
+          "poisiton":n
+        },
+        events: {
+          selectTeam(event){
+            el.selected[n]=event.logo
+            el.$forceUpdate()
+          }
         }
       })
     },
@@ -89,17 +96,7 @@ export default {
     },
     dragFinish: function(to, ev){
       let data = ev.dataTransfer.getData("text")
-      if(this.selected.indexOf(parseInt(data))==-1){
-        this.selected[to] = parseInt(data)
-        this.$forceUpdate()  
-        //ev.target.classList.add('flash')      
-      } else {
-        console.log(this.selected.indexOf(parseInt(data)))
-        let oldIdx = this.selected.indexOf(parseInt(data))
-        this.selected[oldIdx]='undefined'
-        this.selected[to] = parseInt(data)
-        this.$forceUpdate()  
-      }
+      this.pickTeam(data)
     },
     isPicked: function(team){
       if(this.selected.indexOf(team)!=-1){
@@ -110,6 +107,18 @@ export default {
     },
     dragOver:function(ev){
       console.log(ev)
+    },
+    pickTeam:function(data){
+      if(this.selected.indexOf(parseInt(data))==-1){
+        this.selected[to] = parseInt(data)
+        this.$forceUpdate()  
+        //ev.target.classList.add('flash')      
+      } else {
+        let oldIdx = this.selected.indexOf(parseInt(data))
+        this.selected[oldIdx]='undefined'
+        this.selected[to] = parseInt(data)
+        this.$forceUpdate()  
+      }      
     }
   }
 }
