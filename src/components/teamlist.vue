@@ -31,7 +31,7 @@ export default {
     display:flex;
     flex-wrap: wrap;
     margin:0 auto;
-    max-width:650px;
+    max-width:320px;
     text-align:center;
 }
 .teamlist-wrapper div {
@@ -40,5 +40,6 @@ export default {
 .mobile-team-list {
   border: 3px dotted;
   border-radius:10px;
+  background-color: rgba(192,192,192,0.3)
 }
 </style>

@@ -5,39 +5,29 @@
       <b-collapse :open.sync="showList" aria-id="teamList" >
       <div class="team-list">
         <div v-for="(team,i) in teams" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
-          <img :src="logosrc+team.logo" draggable="false" class="" /><br/>
-          <i v-if="isPicked(team.logo)" class="fas fa-check"></i>          
+          <b-tooltip :label="team.name" position="is-top">
+            <img :src="logosrc+team.logo" draggable="false" class="logo-team-list" />
+          </b-tooltip>         
+          <i v-if="isPicked(team.logo)" class="fas fa-check check"></i> 
         </div>
       </div>
       </b-collapse>
     <div class="teams-wrapper">
-      <div class="columns is-mobile loser-winner">
-        <div class="column is-one-quarter-desktop is-two-fifths-mobile">
-          <h1 class="is-size-3"><strong>3-0</strong></h1>
+      <div class="loser-winner">
+        <div class="columns is-mobile">
+          <div class="column is-one-quarter-desktop" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
+              <h1 class="is-size-4"><strong>3-0</strong></h1>            
+              <img :src="logosrc+selected[0]" draggable="false" class="bordas picked"/>
+              <button v-if="!ispickem" class="button is-primary is-small is-hidden-desktop" @click="pickTeams(0, $event)">Pick</button>         
+          </div>        
+          <div class="column is-one-fifth-mobile"></div>
+          <div class="column is-one-quarter-desktop" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
+              <h1 class="is-size-4"><strong>0-3</strong></h1>            
+              <img :src="logosrc+selected[1]" draggable="false" class="bordas picked">
+              <button v-if="!ispickem" class="button is-primary is-small is-hidden-desktop" @click="pickTeams(1, $event)">Pick</button>         
+          </div>
         </div>
-        <div class="column"></div>        
-        <div class="column is-one-quarter-desktop is-two-fifths-mobile">
-          <h1 class="is-size-3"><strong>0-3</strong></h1>
-        </div>
-      </div>
-      <div class="columns is-mobile loser-winner">
-        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile picked" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
-            <img :src="logosrc+selected[0]" draggable="false" class="animated" />
-        </div>        
-        <div class="column"></div>
-        <div class="column bordas is-one-quarter-desktop is-two-fifths-mobile picked" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
-            <img :src="logosrc+selected[1]" draggable="false" class="animated"><br/>
-        </div>
-      </div>
-      <div v-if="!ispickem" class="columns is-mobile is-hidden-desktop">
-        <div class="column is-one-quarter-desktop is-two-fifths-mobile">
-          <button class="button is-primary is-small" @click="pickTeams(0, $event)">Pick</button>         
-        </div>        
-        <div class="column"></div>
-        <div class="column is-one-quarter-desktop is-two-fifths-mobile">
-          <button class="button is-primary is-small" @click="pickTeams(1, $event)">Pick</button>         
-        </div>
-      </div>         
+      </div>        
       <h2 class="remaining-msg">The remaining <strong>7 teams</strong> that will <strong>advance</strong></h2>
       <br/>
       <div class="columns is-mobile is-multiline">
@@ -82,7 +72,8 @@ export default {
             el.pickTeam(event.pos,event.team.logo)
             el.$forceUpdate()
           }
-        }
+        },
+        scroll: "clip"
       })
     },
     removeTeam:function(n,evt){
@@ -97,7 +88,7 @@ export default {
     },
     dragFinish: function(to, ev){
       let data = ev.dataTransfer.getData("text")
-      this.pickTeam(data)
+      this.pickTeam(to, data)
     },
     isPicked: function(team){
       if(this.selected.indexOf(team)!=-1){
@@ -142,6 +133,9 @@ export default {
     max-width: 500px;
     margin: 0 auto;
   }
+  .team-list img:hover{
+    transform: scale(1.5)
+  }  
 }
 @media (max-width:768px) {
   .team-list {
@@ -154,6 +148,11 @@ export default {
   .teams-wrapper {
     padding:1rem;
   }
+  .loser-winner {
+    padding:0 5px;
+    margin: 0 auto;
+  }
+
 }
   .remaining-msg {
     margin-top:30px;
@@ -187,6 +186,12 @@ export default {
   }
   .team-list img, .medium-logo {
     width: 40px;
+    height: 100%;
+  }
+  .check{
+    vertical-align: top;
+    margin-left:5px;
+    position: absolute;
   }
   .bordas {
     border: 3px dotted #e0e0e0;
@@ -216,4 +221,13 @@ export default {
   .show-team-list{
     margin-top:25px;
   }
+  .b-tooltip {
+    text-transform: capitalize;
+  }
+  .b-tooltip.is-primary::after {
+    background-color: #42b983 !important;
+  }
+.b-tooltip.is-top.is-primary::before {
+  border-top-color: #42b983 !important;
+}  
 </style>
