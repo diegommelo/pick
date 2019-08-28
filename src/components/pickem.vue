@@ -87,6 +87,7 @@ export default {
       ev.dataTransfer.dropEffect="move";
     },
     dragFinish: function(to, ev){
+      ev.preventDefault()
       let data = ev.dataTransfer.getData("text")
       this.pickTeam(to, data)
     },

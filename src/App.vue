@@ -24,7 +24,7 @@ export default {
     return {
       isPick:true
     }
-  },
+  }
   watch: {
     '$route': {
       handler: function(params){
