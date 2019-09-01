@@ -1,8 +1,8 @@
 <template>
 <div>
-  <div class="pick-champions is-hidden-mobile">
+  <div v-if="teams" class="pick-champions">
     <slot name="stage"></slot>
-    <div class="columns">
+    <div class="columns quarter-finals is-hidden-mobile">
       <div class="column">
         <h3>Quarter-final #1</h3>
         <picklogo :teams="[teams[0],teams[1]]" :logosrc="logosrc" :selected="selected[0]" :ispickem="ispickem" :pos="0" @teamPicked="pickTeams"></picklogo>
@@ -20,11 +20,33 @@
         <picklogo :teams="[teams[6],teams[7]]" :logosrc="logosrc" :pos="3" :selected="selected[3]" :ispickem="ispickem" @teamPicked="pickTeams"></picklogo>
       </div>            
     </div>
-    <div class="semi-finals">
-      <div class="columns">
+    <div class="section quarter-finals is-hidden-desktop">
+      <div class="columns is-mobile">
+        <div class="column is-half">
+          <h3>Quarter-final #1</h3>
+          <picklogo :teams="[teams[0],teams[1]]" :logosrc="logosrc" :selected="selected[0]" :ispickem="ispickem" :pos="0" @teamPicked="pickTeams"></picklogo>
+        </div>
+        <div class="column is-half">
+          <h3>Quarter-final #2</h3>
+          <picklogo :teams="[teams[2],teams[3]]" :logosrc="logosrc" :selected="selected[1]" :pos="1" :ispickem="ispickem" @teamPicked="pickTeams"></picklogo>    
+        </div>
+        </div>
+        <div class="columns is-mobile">
+        <div class="column is-half">
+          <h3>Quarter-final #3</h3>
+            <picklogo :teams="[teams[4],teams[5]]" :logosrc="logosrc" :pos="2" :selected="selected[2]" :ispickem="ispickem" @teamPicked="pickTeams"></picklogo>      
+        </div>
+        <div class="column is-half">
+          <h3>Quarter-final #4</h3>
+          <picklogo :teams="[teams[6],teams[7]]" :logosrc="logosrc" :pos="3" :selected="selected[3]" :ispickem="ispickem" @teamPicked="pickTeams"></picklogo>
+        </div>            
+        </div> 
+      </div>   
+    <div class="semi-finals section">
+      <div class="columns is-mobile">
         <div class="column">
           <h3>Semi-final #1</h3>
-          <div class="columns">
+          <div class="columns is-mobile">
             <div class="column is-half">
               <img :src="logosrc+selected[0]" :class="[{selected:isPicked(selected[0],4)},'bordas mini-logo picked']" @click="pickTeams([selected[0],4])"/>
             </div>
@@ -35,77 +57,12 @@
         </div>
         <div class="column">
           <h3>Semi-final #2</h3>
-          <div class="columns">
+          <div class="columns is-mobile">
             <div class="column is-half">
               <img :src="logosrc+selected[2]" :class="[{selected:isPicked(selected[2],5)},'bordas mini-logo picked']" @click="pickTeams([selected[2],5])"/>
             </div>
             <div class="column is-half">
               <img :src="logosrc+selected[3]" :class="[{selected:isPicked(selected[3],5)},'bordas mini-logo picked']" @click="pickTeams([selected[3],5])"/>
-            </div>
-          </div>        
-        </div>        
-      </div>
-    </div>
-    <div class="grand-final">
-      <h3>Grand Final</h3>
-      <div class="columns">
-        <div class="column is-half">
-          <img :src="logosrc+selected[4]" :class="[{selected:isPicked(selected[4],6)},'bordas mini-logo picked']" @click="pickTeams([selected[4],6])" />
-        </div>
-        <div class="column is-half">
-          <img :src="logosrc+selected[5]" :class="[{selected:isPicked(selected[5],6)},'bordas mini-logo picked']" @click="pickTeams([selected[5],6])" />
-        </div>
-      </div>
-    </div>
-    <div class="major-champion">
-      <h3>Major Champion</h3>
-      <img :src="logosrc+selected[6]" :class="[{selected:isPicked(selected[6],6)},'bordas picked']" /> 
-    </div>
-    <slot name="savePickBtn"></slot>
-  </div>
-  <div class="pick-champions is-hidden-desktop section">
-    <slot name="stage"></slot>
-    <div class="columns is-mobile">
-      <div class="column is-half">
-        <h3>Quarter-final #1</h3>
-        <picklogo :teams="[teams[0],teams[1]]" :logosrc="logosrc" :selected="selected[0]" :ispickem="ispickem" :pos="0" @teamPicked="pickTeams"></picklogo>
-      </div>
-      <div class="column is-half">
-        <h3>Quarter-final #2</h3>
-        <picklogo :teams="[teams[2],teams[3]]" :logosrc="logosrc" :selected="selected[1]" :pos="1" :ispickem="ispickem" @teamPicked="pickTeams"></picklogo>    
-      </div>
-      </div>
-      <div class="columns is-mobile">
-      <div class="column is-half">
-        <h3>Quarter-final #3</h3>
-          <picklogo :teams="[teams[4],teams[5]]" :logosrc="logosrc" :pos="2" :selected="selected[2]" :ispickem="ispickem" @teamPicked="pickTeams"></picklogo>      
-      </div>
-      <div class="column is-half">
-        <h3>Quarter-final #4</h3>
-        <picklogo :teams="[teams[6],teams[7]]" :logosrc="logosrc" :pos="3" :selected="selected[3]" :ispickem="ispickem" @teamPicked="pickTeams"></picklogo>
-      </div>            
-      </div>
-    <div class="semi-finals">
-      <div class="columns is-mobile">
-        <div class="column">
-          <h3>Semi-final #1</h3>
-          <div class="columns is-mobile">
-            <div class="column is-half">
-              <img :src="logosrc+selected[0]" :class="[{selected:isPicked(selected[0],4)},'bordas picked']" @click="pickTeams([selected[0],4])"/>
-            </div>
-            <div class="column is-half">
-              <img :src="logosrc+selected[1]" :class="[{selected:isPicked(selected[1],4)},'bordas picked']" @click="pickTeams([selected[1],4])" />
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <h3>Semi-final #2</h3>
-          <div class="columns is-mobile">
-            <div class="column is-half">
-              <img :src="logosrc+selected[2]" :class="[{selected:isPicked(selected[2],5)},'bordas picked']" @click="pickTeams([selected[2],5])"/>
-            </div>
-            <div class="column is-half">
-              <img :src="logosrc+selected[3]" :class="[{selected:isPicked(selected[3],5)},'bordas picked']" @click="pickTeams([selected[3],5])"/>
             </div>
           </div>        
         </div>        
@@ -177,6 +134,9 @@ export default {
   .mini-logo {
     width:100px;
   }
+  .grand-final img {
+    max-width: 100px;
+  }
   .major-champion img {
     max-width:120px;
   }
@@ -192,6 +152,9 @@ export default {
   .major-champion img {
     max-width: 100px;
   }  
+  .quarter-finals img {
+    max-width: 55px;
+  }
 }
 .pick-champions {
   max-width:850px;

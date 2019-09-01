@@ -1,5 +1,5 @@
 <template>
-    <div class="columns is-mobile">
+    <div v-if="teams.indexOf(undefined)==-1" class="columns is-mobile">
         <div v-for="team in teams" class="column" :key="team.logo" @click="pickTeam(team.logo)">
             <img :src="logosrc+team.logo" :class="[{selected:isPicked(team.logo)},'bordas picked']" /><br/>
             <p class="team-name">{{team.name}}</p>
@@ -30,7 +30,7 @@
                     return false
                 }    
             }
-        }        
+        }
     }
 </script>
 <style scoped>
