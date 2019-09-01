@@ -7,7 +7,7 @@
     <div id="nav" v-if="isPick">
       <router-link to="/major/berlin/stage/challengers">Challengers</router-link> |
       <router-link to="/major/berlin/stage/legends">Legends</router-link> |  
-      <router-link to="/">Champions <small><i>(maybe)</i></small></router-link>      
+      <router-link to="/major/berlin/stage/champions">Champions</router-link>      
     </div>
     <router-view/>
     <br/>
@@ -24,7 +24,12 @@ export default {
     return {
       isPick:true
     }
-  }
+  },
+  methods: {
+    track () {
+      this.$ga.page('/')
+    }
+  },  
   watch: {
     '$route': {
       handler: function(params){

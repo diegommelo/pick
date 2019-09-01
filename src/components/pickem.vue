@@ -1,48 +1,55 @@
 <template>
   <div>
     <slot name="stage"></slot>
-      <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop show-team-list"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
-      <b-collapse :open.sync="showList" aria-id="teamList" >
-      <div class="team-list">
-        <div v-for="(team,i) in teams" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
-          <b-tooltip :label="team.name" position="is-top">
-            <img :src="logosrc+team.logo" draggable="false" class="logo-team-list" />
-          </b-tooltip>         
-          <i v-if="isPicked(team.logo)" class="fas fa-check check"></i> 
-        </div>
-      </div>
-      </b-collapse>
-    <div class="teams-wrapper">
-      <div class="loser-winner">
-        <div class="columns is-mobile">
-          <div class="column is-one-quarter-desktop" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
-              <h1 class="is-size-4"><strong>3-0</strong></h1>            
-              <img :src="logosrc+selected[0]" draggable="false" class="bordas picked"/>
-              <button v-if="!ispickem" class="button is-primary is-small is-hidden-desktop" @click="pickTeams(0, $event)">Pick</button>         
-          </div>        
-          <div class="column is-one-fifth-mobile"></div>
-          <div class="column is-one-quarter-desktop" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
-              <h1 class="is-size-4"><strong>0-3</strong></h1>            
-              <img :src="logosrc+selected[1]" draggable="false" class="bordas picked">
-              <button v-if="!ispickem" class="button is-primary is-small is-hidden-desktop" @click="pickTeams(1, $event)">Pick</button>         
+      <div v-if="stage!='champions'">
+        <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop show-team-list"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
+        <b-collapse :open.sync="showList" aria-id="teamList" >
+        <div class="team-list">
+          <div v-for="(team,i) in teams" :key="team.logo" draggable="true" @dragstart="dragStart($event)" :id="team.logo" class="">
+            <b-tooltip :label="team.name" position="is-top">
+              <img :src="logosrc+team.logo" draggable="false" class="logo-team-list" />
+            </b-tooltip>         
+            <i v-if="isPicked(team.logo)" class="fas fa-check check"></i> 
           </div>
         </div>
-      </div>        
-      <h2 class="remaining-msg">The remaining <strong>7 teams</strong> that will <strong>advance</strong></h2>
-      <br/>
-      <div class="columns is-mobile is-multiline">
-        <div v-for="n in 7" :key="n" class="column is-one-third-mobile" @click="removeTeam(n+1,$event)" @dragover.prevent draggable="false" @drop="dragFinish(n+1,$event)">
-          <img :src="logosrc+selected[n+1]" class="mini-logo bordas picked" draggable="false"/><br/>
-          <button v-if="!ispickem" class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+1, $event)">Pick</button>
+        </b-collapse>
+      <div class="teams-wrapper">
+        <div class="loser-winner">
+          <div class="columns is-mobile">
+            <div class="column is-one-quarter-desktop" @dragover.prevent draggable="false" @drop="dragFinish(0,$event)" @click="removeTeam(0,$event)">
+                <h1 class="is-size-4"><strong>3-0</strong></h1>            
+                <img :src="logosrc+selected[0]" draggable="false" class="bordas picked"/>
+                <button v-if="!ispickem" class="button is-primary is-small is-hidden-desktop" @click="pickTeams(0, $event)">Pick</button>         
+            </div>        
+            <div class="column is-one-fifth-mobile"></div>
+            <div class="column is-one-quarter-desktop" @dragover.prevent draggable="false" @drop="dragFinish(1,$event)" @click="removeTeam(1,$event)">
+                <h1 class="is-size-4"><strong>0-3</strong></h1>            
+                <img :src="logosrc+selected[1]" draggable="false" class="bordas picked">
+                <button v-if="!ispickem" class="button is-primary is-small is-hidden-desktop" @click="pickTeams(1, $event)">Pick</button>         
+            </div>
+          </div>
+        </div>        
+        <h2 class="remaining-msg">The remaining <strong>7 teams</strong> that will <strong>advance</strong></h2>
+        <br/>
+        <div class="columns is-mobile is-multiline">
+          <div v-for="n in 7" :key="n" class="column is-one-third-mobile" @click="removeTeam(n+1,$event)" @dragover.prevent draggable="false" @drop="dragFinish(n+1,$event)">
+            <img :src="logosrc+selected[n+1]" class="mini-logo bordas picked" draggable="false"/><br/>
+            <button v-if="!ispickem" class="is-hidden-desktop button pick-button is-primary is-small" @click="pickTeams(n+1, $event)">Pick</button>
+          </div>
         </div>
+        <slot name="savePickBtn"></slot>
       </div>
-      <slot name="savePickBtn"></slot>
+    </div>
+    <div v-else class="teams-wrapper">
+      <pickemChampions v-if="teams" :teams="teams" :major="major" stage='champions' :selected="selected" :ispickem="true"></pickemChampions>
+      <slot name="savePickBtn"></slot>    
     </div>
   </div>
 </template>
 
 <script>
 import teamlist from '@/components/teamlist.vue'
+import pickemChampions from '@/components/pickemChampions.vue'
 import { ModalProgrammatic as Modal } from 'buefy'
 
 export default {
@@ -53,6 +60,9 @@ export default {
       logosrc:"https://static.hltv.org/images/team/logo/",
       showList:true,
     }
+  },
+  components: {
+    pickemChampions
   },
   methods:{
     pickTeams: function(n, evt){
