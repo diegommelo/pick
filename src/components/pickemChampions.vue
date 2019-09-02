@@ -123,7 +123,6 @@ export default {
   computed: {
     findTeam: function(){
       let el = this
-      console.log(this.selected[6])
       var found = this.teams.find(function(ele){
           if(ele.logo==el.selected[6]){
             return ele
