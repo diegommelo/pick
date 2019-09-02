@@ -81,7 +81,8 @@
     </div>
     <div class="major-champion">
       <h3>Major Champion</h3>
-      <img :src="logosrc+selected[6]" :class="[{selected:isPicked(selected[6],6)},'bordas picked']" /> 
+      <img :src="logosrc+selected[6]" :class="[{selected:isPicked(selected[6],6)},'bordas picked']" /><br/>
+      <p v-if="ispickem" class="champion">{{findTeam}}</p> 
     </div>
     <slot name="savePickBtn"></slot>
   </div>
@@ -111,12 +112,6 @@ export default {
         this.$forceUpdate()
       }
     },
-    removeTeam:function(n,evt){
-      if(!this.ispickem){
-        this.selected[n]='undefined'
-        this.$forceUpdate()
-      }
-    },
     isPicked: function(team,pos){
       if(this.selected[pos]==parseInt(team)){
         return true
@@ -124,7 +119,21 @@ export default {
         return false
       }    
     }
-  }
+  },
+  computed: {
+    findTeam: function(){
+      let el = this
+      console.log(this.selected[6])
+      var found = this.teams.find(function(ele){
+          if(ele.logo==el.selected[6]){
+            return ele
+          }
+        })
+      if(found!==undefined){
+        return found['name']
+      }
+      }
+  }  
 }
 </script>
 
@@ -162,6 +171,10 @@ export default {
 }
 .pick-champions h3 {
   padding:10px 0;
+  font-weight: bold;
+}
+.champion {
+  text-transform: uppercase;
   font-weight: bold;
 }
 .finals-logo {
