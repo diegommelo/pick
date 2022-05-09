@@ -1,7 +1,8 @@
 <template>
   <div>
+    <slot name="majorLogo"></slot>
     <slot name="stage"></slot>
-      <div v-if="stage!='champions' && teams">
+      <div v-if="stage!='champions'">
         <h3 @click="showList = !showList" aria-controls="teamList" class="is-hidden-desktop show-team-list"><span v-if="!showList">Show</span> <span v-else>Hide</span> team list <i v-if="!showList" class="fas fa-arrow-down"></i><i v-else class="fas fa-arrow-up"></i></h3>
         <b-collapse :open.sync="showList" aria-id="teamList" >
         <div class="team-list">
@@ -41,7 +42,7 @@
         <slot name="savePickBtn"></slot>
       </div>
       </div>
-    <div v-if="stage == 'chamopions'" class="teams-wrapper">
+    <div v-if="stage == 'champions'" class="teams-wrapper">
       <pickemChampions v-if="teams" :teams="teams" :major="major" stage='champions' :selected="selected" :ispickem="true"></pickemChampions>
       <slot name="savePickBtn"></slot>    
     </div>
@@ -79,7 +80,6 @@ export default {
         },
         events: {
           selectTeam(event){
-            console.log(event)
             el.pickTeam(event.pos,event.team.logo)
             el.$forceUpdate()
           }
@@ -127,14 +127,9 @@ export default {
     checkLogoV2(teamId){
       if (teamId !== 'undefined'){
         let team = this.teams.find(team => team.logo == teamId)
-        if(team.logov2_src){
-          return team.logov2_src
-        } else {
-          return this.logosrc+team.logo
-        }
-      } else {
-        return `${this.logosrc}'undefined'`
+        return team.logov2_src ? team.logov2_src : this.logosrc+team.logo
       }
+        return `${this.logosrc}'undefined'`
     }
   }
 }
