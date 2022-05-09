@@ -53,9 +53,6 @@ export default {
           "position":"is-bottom"
         })        
       } else {
-        let data = {
-
-        }
         try {
           db.collection('picks').add({
             pickeds: this.selected,
