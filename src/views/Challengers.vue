@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected" :ispickem="false" v-on:save-pick="savePick">
+    <pickem v-if="times != null" :teams="times" :major="major" :stage="stage" :selected="selected" :ispickem="false" v-on:save-pick="savePick">
       <template v-slot:stage></template>
       <template v-slot:savePickBtn>
         <small class="is-hidden-mobile">(Click to remove)</small>
@@ -8,6 +8,7 @@
         <button class="button is-primary btnSave" @click="savePick()">Save Pick'Em</button>
       </template>
     </pickem>
+    <p v-else class="mt-2">No picks available</p>
     <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
   </div>
 </template>
@@ -39,9 +40,11 @@ export default {
         this.selected=["undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined","undefined"]
         this.$bind('times', this.db.doc(stage)).then(times=>{
           this.times = times['teams']
+        }).finally(()=> {
           this.isLoading=false
-        })  
+        })
       } else {
+        this.isLoading = false
         console.log('fuen')
       }   
     },
@@ -53,9 +56,6 @@ export default {
           "position":"is-bottom"
         })        
       } else {
-        let data = {
-
-        }
         try {
           db.collection('picks').add({
             pickeds: this.selected,

@@ -1,6 +1,10 @@
 <template>
   <div class="home">
     <pickem v-if="times" :teams="times" :major="major" :stage="stage" :selected="selected" :ispickem="true">
+      <template v-slot:majorLogo>
+        <img v-if="major == 'berlin'" src="https://static.hltv.org/images/eventLogos/4450.png" class="major-logo"/>
+        <img v-if="major == 'antwerp'" src="https://escorenews.com/media/tournament/e6575.png" class="major-logo"/>        
+      </template>      
       <template v-slot:stage>
         <h3 class="stage-pick">{{stage}} Stage</h3>
         <h2 v-if="name!=null" class="by-user">by {{name}}</h2>
